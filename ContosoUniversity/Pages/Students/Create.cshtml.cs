@@ -25,25 +25,19 @@ namespace ContosoUniversity
         }
 
         [BindProperty]
-        public Student Student { get; set; }
+        public StudentVM StudentVM { get; set; }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            var emptyStudent = new Student();
-
-            if (await TryUpdateModelAsync<Student>(
-                emptyStudent,
-                "student",   // Prefix for form value.
-                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
+            if (!ModelState.IsValid)
             {
-                _context.Students.Add(emptyStudent);
-                await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                return Page();
             }
 
-            return Page();
+            var entry = _context.Add(new Student());
+            entry.CurrentValues.SetValues(StudentVM);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("./Index");
         }
     }
 }
