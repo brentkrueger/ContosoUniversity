@@ -177,7 +177,7 @@ namespace ContosoUniversity.Migrations
             modelBuilder.Entity("ContosoUniversity.Models.Course", b =>
                 {
                     b.HasOne("ContosoUniversity.Models.Department", "Department")
-                        .WithMany("Courses")
+                        .WithMany("CourseVMs")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

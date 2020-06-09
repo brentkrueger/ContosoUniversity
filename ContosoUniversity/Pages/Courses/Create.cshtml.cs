@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using ContosoUniversity.Models;
-using ContosoUniversity.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ContosoUniversity.Pages.Students
+namespace ContosoUniversity.Pages.Courses
 {
     public class CreateModel : PageModel
     {
@@ -17,12 +17,15 @@ namespace ContosoUniversity.Pages.Students
 
         public IActionResult OnGet()
         {
+        ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
             return Page();
         }
 
         [BindProperty]
-        public StudentVM StudentVM { get; set; }
+        public Course Course { get; set; }
 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -30,9 +33,9 @@ namespace ContosoUniversity.Pages.Students
                 return Page();
             }
 
-            var entry = _context.Add(new Student());
-            entry.CurrentValues.SetValues(StudentVM);
+            _context.Courses.Add(Course);
             await _context.SaveChangesAsync();
+
             return RedirectToPage("./Index");
         }
     }
